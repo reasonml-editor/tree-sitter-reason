@@ -1,0 +1,280 @@
+================================================================================
+Just module
+================================================================================
+
+
+module Next_steps = {
+  let x = true;
+};
+
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (module_definition
+    (module_binding
+      (module_name)
+      (block
+        (let_binding
+          (value_name)
+          (expression
+            (boolean)))))))
+
+================================================================================
+Simple react component made by simple man
+================================================================================
+
+module Next_steps = {
+  let make = (~configuration) => {
+    let x = <Div></Div>;
+    <div><p></p></div>;
+  };
+}
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (module_definition
+    (module_binding
+      (module_name)
+      (block
+        (let_binding
+          (value_name)
+          (expression
+            (function_expression
+              (parameter)
+              (block
+                (let_binding
+                  (value_name)
+                  (expression
+                    (jsx_element
+                      (jsx_opening_element
+                        (identifier))
+                      (jsx_closing_element
+                        (identifier)))))
+                (expression_statement
+                  (expression
+                    (jsx_element
+                      (jsx_opening_element
+                        (identifier))
+                      (jsx_element
+                        (jsx_opening_element
+                          (identifier))
+                        (jsx_closing_element
+                          (identifier)))
+                      (jsx_closing_element
+                        (identifier)))))))))))))
+
+================================================================================
+Component with attributes
+================================================================================
+
+
+// module Next_steps = {
+//   [@react.component]
+//   let make = (~configuration: Configuration.t) => {
+//     let next_steps = configuration |> next_steps |> React.string;
+//
+//     <Box flexDirection=`column> <Text color="cyan"> next_steps </Text> </Box>;
+//   };
+// };
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+  (comment))
+
+================================================================================
+JSX Page
+================================================================================
+
+let _ = <MyComponent foo={bar} />;
+let _ = <div foo={bar}> child1 child2 </div>;
+let _ = <> child1 child2 </>
+let _ = <MyComponent> foo bar </MyComponent>
+let _ = <MyComponent> ...foo </MyComponent>
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (jsx_self_closing_element
+        (identifier)
+        (jsx_attribute
+          (property_identifier
+            (identifier))
+          (jsx_expression
+            (expression
+              (value_path
+                (value_name))))))))
+  (let_binding
+    (value_name)
+    (expression
+      (jsx_element
+        (jsx_opening_element
+          (identifier)
+          (jsx_attribute
+            (property_identifier
+              (identifier))
+            (jsx_expression
+              (expression
+                (value_path
+                  (value_name))))))
+        (jsx_expression
+          (value_name))
+        (jsx_expression
+          (value_name))
+        (jsx_closing_element
+          (identifier)))))
+  (let_binding
+    (value_name)
+    (expression
+      (jsx_element
+        (jsx_opening_element)
+        (jsx_expression
+          (value_name))
+        (jsx_expression
+          (value_name))
+        (jsx_closing_element))))
+  (let_binding
+    (value_name)
+    (expression
+      (jsx_element
+        (jsx_opening_element
+          (identifier))
+        (jsx_expression
+          (value_name))
+        (jsx_expression
+          (value_name))
+        (jsx_closing_element
+          (identifier)))))
+  (let_binding
+    (value_name)
+    (expression
+      (jsx_element
+        (jsx_opening_element
+          (identifier))
+        (unpack
+          (value_path
+            (value_name)))
+        (jsx_closing_element
+          (identifier))))))
+
+================================================================================
+JSX: Most of the features
+================================================================================
+
+let _ = <MyComponent
+  booleanAttribute={true}
+  stringAttribute="string"
+  intAttribute=1
+  optionalProp={Some("hello")}
+  forcedOptional=?{Some("hello")}
+  onClick={event => handleClick(event)}>
+  <div> {"hello"} </div>
+</MyComponent>;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (jsx_element
+        (jsx_opening_element
+          (identifier)
+          (jsx_attribute
+            (property_identifier
+              (identifier))
+            (jsx_expression
+              (expression
+                (boolean))))
+          (jsx_attribute
+            (property_identifier
+              (identifier))
+            (string
+              (string_content)))
+          (jsx_attribute
+            (property_identifier
+              (identifier))
+            (number))
+          (jsx_attribute
+            (property_identifier
+              (identifier))
+            (jsx_expression
+              (expression
+                (application_expression
+                  (expression
+                    (constructor_path
+                      (constructor_name)))
+                  (string
+                    (string_content))))))
+          (jsx_attribute
+            (property_identifier
+              (identifier))
+            (jsx_expression
+              (expression
+                (application_expression
+                  (expression
+                    (constructor_path
+                      (constructor_name)))
+                  (string
+                    (string_content))))))
+          (jsx_attribute
+            (property_identifier
+              (identifier))
+            (jsx_expression
+              (expression
+                (function_expression
+                  (parameter)
+                  (expression
+                    (application_expression
+                      (expression
+                        (value_path
+                          (value_name)))
+                      (value_path
+                        (value_name)))))))))
+        (jsx_element
+          (jsx_opening_element
+            (identifier))
+          (jsx_expression
+            (expression
+              (string
+                (string_content))))
+          (jsx_closing_element
+            (identifier)))
+        (jsx_closing_element
+          (identifier))))))
+
+================================================================================
+punning
+================================================================================
+
+let _ = <MyComponent isLoading text onClick />;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (jsx_self_closing_element
+        (identifier)
+        (jsx_attribute
+          (property_identifier
+            (identifier)))
+        (jsx_attribute
+          (property_identifier
+            (identifier)))
+        (jsx_attribute
+          (property_identifier
+            (identifier)))))))

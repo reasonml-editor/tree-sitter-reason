@@ -1,0 +1,782 @@
+================================================================================
+if
+================================================================================
+
+let x = if (condition) { 5 } else { 6 };
+let y = true ? 5 : 6;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (if_expression
+        (expression
+          (value_path
+            (value_name)))
+        (block
+          (expression_statement
+            (expression
+              (number))))
+        (block
+          (expression_statement
+            (expression
+              (number)))))))
+  (let_binding
+    (value_name)
+    (expression
+      (ternary_expression
+        (expression
+          (boolean))
+        (expression
+          (number))
+        (expression
+          (number))))))
+
+================================================================================
+calls
+================================================================================
+
+let x = f(1, 2, 3);
+let y = (1, 2, 3);
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (application_expression
+        (expression
+          (value_path
+            (value_name)))
+        (number)
+        (number)
+        (number))))
+  (let_binding
+    (value_name)
+    (expression
+      (product_expression
+        (expression
+          (number))
+        (expression
+          (number))
+        (expression
+          (number))))))
+
+================================================================================
+basic func
+================================================================================
+
+let divide = (~a, ~b) => a / b;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (function_expression
+        (parameter)
+        (parameter)
+        (expression
+          (infix_expression
+            (value_path
+              (value_name))
+            (mult_operator)
+            (value_path
+              (value_name))))))))
+
+================================================================================
+functions
+================================================================================
+
+let rec infinite = () => infinite();
+let x = 32 |> half |> half;
+let divide: intFn = (a, b) => a / b;
+
+let divide = (~a, ~b) => a / b;
+let f = divide(~a=6, ~b=2);
+let f = divide(~a, ~b);
+let divide = (a: int, b: int): int => a / b;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (function_expression
+        (expression
+          (application_expression
+            (expression
+              (value_path
+                (value_name))))))))
+  (let_binding
+    (value_name)
+    (expression
+      (infix_expression
+        (infix_expression
+          (number)
+          (rel_operator)
+          (value_path
+            (value_name)))
+        (rel_operator)
+        (value_path
+          (value_name)))))
+  (let_binding
+    (value_name)
+    (type_constructor_path
+      (type_constructor))
+    (expression
+      (function_expression
+        (parameter)
+        (parameter)
+        (expression
+          (infix_expression
+            (value_path
+              (value_name))
+            (mult_operator)
+            (value_path
+              (value_name)))))))
+  (let_binding
+    (value_name)
+    (expression
+      (function_expression
+        (parameter)
+        (parameter)
+        (expression
+          (infix_expression
+            (value_path
+              (value_name))
+            (mult_operator)
+            (value_path
+              (value_name)))))))
+  (let_binding
+    (value_name)
+    (expression
+      (application_expression
+        (expression
+          (value_path
+            (value_name)))
+        (labeled_argument
+          (label_name)
+          (number))
+        (labeled_argument
+          (label_name)
+          (number)))))
+  (let_binding
+    (value_name)
+    (expression
+      (application_expression
+        (expression
+          (value_path
+            (value_name)))
+        (labeled_argument
+          (label_name))
+        (labeled_argument
+          (label_name)))))
+  (let_binding
+    (value_name)
+    (expression
+      (function_expression
+        (parameter
+          (type_constructor_path
+            (type_constructor)))
+        (parameter
+          (type_constructor_path
+            (type_constructor)))
+        (type_constructor_path
+          (type_constructor))
+        (expression
+          (infix_expression
+            (value_path
+              (value_name))
+            (mult_operator)
+            (value_path
+              (value_name))))))))
+
+================================================================================
+func with type and optional value
+================================================================================
+
+let print = (~prefix: option(string)=?, text) => text;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (function_expression
+        (parameter
+          (type_nested
+            (type_constructor_path
+              (type_constructor))
+            (type_constructor_path
+              (type_constructor))))
+        (parameter)
+        (expression
+          (value_path
+            (value_name)))))))
+
+================================================================================
+lists
+================================================================================
+
+// List (Immutable)
+let l = [1, 2, 3]
+
+// List concat
+let l = [a1, a2] @ theRest
+
+// Array (Mutable)
+let l = [|1, 2, 3|];
+
+// Array access
+let xyz = [|1, 2, 3|];
+
+// Tuples
+let l = (1, "hello")
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (list_expression
+        (expression
+          (number))
+        (expression
+          (number))
+        (expression
+          (number)))))
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (infix_expression
+        (list_expression
+          (expression
+            (value_path
+              (value_name)))
+          (expression
+            (value_path
+              (value_name))))
+        (concat_operator)
+        (value_path
+          (value_name)))))
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (array_expression
+        (expression
+          (number))
+        (expression
+          (number))
+        (expression
+          (number)))))
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (array_expression
+        (expression
+          (number))
+        (expression
+          (number))
+        (expression
+          (number)))))
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (product_expression
+        (expression
+          (number))
+        (expression
+          (string
+            (string_content)))))))
+
+================================================================================
+list: reason
+================================================================================
+
+// List add to front
+let l = [a1, a2, ...theRest]
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (list_expression
+        (expression
+          (value_path
+            (value_name)))
+        (expression
+          (value_path
+            (value_name)))
+        (expression
+          (unpack
+            (value_path
+              (value_name))))))))
+
+================================================================================
+auto semi colons
+================================================================================
+
+let x = 1
+let y = 2
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (number)))
+  (let_binding
+    (value_name)
+    (expression
+      (number))))
+
+================================================================================
+typed expr
+================================================================================
+
+let y = (5 : int);
+
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (expression
+        (number))
+      (type_constructor_path
+        (type_constructor)))))
+
+================================================================================
+type expression
+================================================================================
+
+// Type Parameters
+type pair('a, 'b) = ('a, 'b);
+
+// Annotation with parameters
+let x: pair(int, string) = (10, "ten");
+
+// String list
+let x: list(string) = ["Hello", "World"];
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (comment)
+  (type_definition
+    (type_binding
+      (type_constructor)
+      (type_constructor)
+      (type_constructor)
+      (type_constructor)
+      (type_constructor)
+      (tuple_type
+        (type_constructor_path
+          (type_constructor)
+          (type_constructor))
+        (type_constructor_path
+          (type_constructor)
+          (type_constructor)))))
+  (comment)
+  (let_binding
+    (value_name)
+    (type_nested
+      (type_constructor_path
+        (type_constructor))
+      (type_constructor_path
+        (type_constructor))
+      (type_constructor_path
+        (type_constructor)))
+    (expression
+      (product_expression
+        (expression
+          (number))
+        (expression
+          (string
+            (string_content))))))
+  (comment)
+  (let_binding
+    (value_name)
+    (type_nested
+      (type_constructor_path
+        (type_constructor))
+      (type_constructor_path
+        (type_constructor)))
+    (expression
+      (list_expression
+        (expression
+          (string
+            (string_content)))
+        (expression
+          (string
+            (string_content)))))))
+
+================================================================================
+records
+================================================================================
+
+// Record definition
+type t = {foo: int, bar: string};
+
+// Record creation
+let x = {foo: 10, bar: "hello"};
+
+// Record access
+let y = x.foo;
+
+// Record update
+let y = {...x, bar: "world"};
+
+// Record destructuring
+let {foo, bar} = x;
+
+// Mutable fields
+type t = {mutable baz: int}; let z = {baz: 10};
+
+// Mutable field updates
+z.baz = 23;
+
+// with type parameters
+type t('a) = {foo: 'a, bar: string};
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (comment)
+  (type_definition
+    (type_binding
+      (type_constructor)
+      (record_declaration
+        (field_declaration
+          (field_name)
+          (type_constructor_path
+            (type_constructor)))
+        (field_declaration
+          (field_name)
+          (type_constructor_path
+            (type_constructor))))))
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (record_expression
+        (field_expression
+          (field_path
+            (field_name))
+          (number))
+        (field_expression
+          (field_path
+            (field_name))
+          (string
+            (string_content))))))
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (field_get_expression
+        (value_path
+          (value_name))
+        (field_path
+          (field_name)))))
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (record_expression
+        (unpack
+          (value_path
+            (value_name)))
+        (field_expression
+          (field_path
+            (field_name))
+          (string
+            (string_content))))))
+  (comment)
+  (let_binding
+    (record_destructure
+      (record_destructure_field
+        (value_name))
+      (record_destructure_field
+        (value_name)))
+    (expression
+      (value_path
+        (value_name))))
+  (comment)
+  (type_definition
+    (type_binding
+      (type_constructor)
+      (record_declaration
+        (field_declaration
+          (field_name)
+          (type_constructor_path
+            (type_constructor))))))
+  (let_binding
+    (value_name)
+    (expression
+      (record_expression
+        (field_expression
+          (field_path
+            (field_name))
+          (number)))))
+  (comment)
+  (mutable_record_update
+    (field_get_expression
+      (value_path
+        (value_name))
+      (field_path
+        (field_name)))
+    (expression
+      (number)))
+  (comment)
+  (type_definition
+    (type_binding
+      (type_constructor)
+      (type_constructor)
+      (type_constructor)
+      (record_declaration
+        (field_declaration
+          (field_name)
+          (type_constructor_path
+            (type_constructor)
+            (type_constructor)))
+        (field_declaration
+          (field_name)
+          (type_constructor_path
+            (type_constructor)))))))
+
+================================================================================
+Variants, same as OCaml
+================================================================================
+
+// Variant definition
+type t = | Foo | Bar;
+
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (comment)
+  (type_definition
+    (type_binding
+      (type_constructor)
+      (variant_declaration
+        (constructor_declaration
+          (constructor_name))
+        (constructor_declaration
+          (constructor_name))))))
+
+================================================================================
+Defining variants, different than ocaml
+================================================================================
+
+// With type parameters
+type t('a) = | One('a) | Two('a, 'a);
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (comment)
+  (type_definition
+    (type_binding
+      (type_constructor)
+      (type_constructor)
+      (type_constructor)
+      (variant_declaration
+        (constructor_declaration
+          (constructor_name)
+          (type_constructor_path
+            (type_constructor)
+            (type_constructor)))
+        (constructor_declaration
+          (constructor_name)
+          (type_constructor_path
+            (type_constructor)
+            (type_constructor))
+          (type_constructor_path
+            (type_constructor)
+            (type_constructor)))))))
+
+================================================================================
+Variants, different than ocaml
+================================================================================
+
+// Variants with args
+type t = | Foo(string) | Bar(int);
+
+// Using a variant
+let x = Two("Hello", "World");
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (comment)
+  (type_definition
+    (type_binding
+      (type_constructor)
+      (variant_declaration
+        (constructor_declaration
+          (constructor_name)
+          (type_constructor_path
+            (type_constructor)))
+        (constructor_declaration
+          (constructor_name)
+          (type_constructor_path
+            (type_constructor))))))
+  (comment)
+  (let_binding
+    (value_name)
+    (expression
+      (application_expression
+        (expression
+          (constructor_path
+            (constructor_name)))
+        (string
+          (string_content))
+        (string
+          (string_content))))))
+
+================================================================================
+pattern matching literals
+================================================================================
+
+switch (foo) {
+| 1 => "one"
+| 2 => "two"
+| _ => "big number"
+};
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (expression_statement
+    (expression
+      (switch_expression
+        (expression
+          (value_path
+            (value_name)))
+        (number)
+        (expression
+          (string
+            (string_content)))
+        (number)
+        (expression
+          (string
+            (string_content)))
+        (value_pattern)
+        (expression
+          (string
+            (string_content)))))))
+
+================================================================================
+dmmulroy
+================================================================================
+
+open Bindings;
+module Scaffold = Scaffold;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (open_statement
+    (module_path
+      (module_name)))
+  (module_definition
+    (module_binding
+      (module_name)
+      (module_path
+        (module_name)))))
+
+================================================================================
+quoted strings
+================================================================================
+
+let x = {|hello world|};
+let y = {j|example|j};
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (quoted_string
+        (quoted_string_content))))
+  (let_binding
+    (value_name)
+    (expression
+      (quoted_string
+        (quoted_string_content)))))
+
+================================================================================
+pattern matching variants
+================================================================================
+
+// let x = switch (foo) {
+// | Some(value) => doSomething(value)
+// | None => error()
+// };
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (comment)
+  (comment)
+  (comment)
+  (comment))
+
+================================================================================
+Array Access
+================================================================================
+
+let y = arr[1];
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (array_get_expression
+        (expression
+          (value_path
+            (value_name)))
+        (expression
+          (number))))))
+
+================================================================================
+poly-morphic variants
+================================================================================
+
+let y = `poly;
+let y = `PoLy;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (tag)))
+  (let_binding
+    (value_name)
+    (expression
+      (tag))))
