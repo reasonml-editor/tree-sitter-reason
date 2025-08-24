@@ -1,0 +1,35 @@
+================================================================================
+basic type
+================================================================================
+
+type x = int;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (type_definition
+    (type_binding
+      (type_constructor)
+      (type_constructor_path
+        (type_constructor)))))
+
+================================================================================
+function types
+================================================================================
+
+
+type intFn = (int, int) => int;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (type_definition
+    (type_binding
+      (type_constructor)
+      (function_type
+        (type_constructor_path
+          (type_constructor))
+        (type_constructor_path
+          (type_constructor))
+        (type_constructor_path
+          (type_constructor))))))

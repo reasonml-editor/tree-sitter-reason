@@ -1,0 +1,138 @@
+================================================================================
+Simple let expressions
+================================================================================
+
+let int = 5;
+let float = 5.0;
+let bool = true;
+let ident = ident;
+let str = "string";
+let escaped = "str\"ing";
+let char = 'c';
+let escpaed = '\'';
+let unit = ();
+// let tu = (1, 2, "hello");
+// let fn = (a, b) => a;
+
+// let li = [1, 2, 3,];
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (number)))
+  (let_binding
+    (value_name)
+    (expression
+      (number)))
+  (let_binding
+    (value_name)
+    (expression
+      (boolean)))
+  (let_binding
+    (value_name)
+    (expression
+      (value_path
+        (value_name))))
+  (let_binding
+    (value_name)
+    (expression
+      (string
+        (string_content))))
+  (let_binding
+    (value_name)
+    (expression
+      (string
+        (string_content
+          (escape_sequence)))))
+  (let_binding
+    (value_name)
+    (expression
+      (character
+        (character_content))))
+  (let_binding
+    (value_name)
+    (expression
+      (character
+        (character_content
+          (escape_sequence)))))
+  (let_binding
+    (value_name)
+    (expression
+      (unit)))
+  (comment)
+  (comment)
+  (comment))
+
+================================================================================
+Simple maths
+================================================================================
+
+let int = 5 + 10 * 2 / 3;
+let float = 5.0 +. 10.0 *. 2.0 /. 3.0;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (infix_expression
+        (number)
+        (add_operator)
+        (infix_expression
+          (infix_expression
+            (number)
+            (mult_operator)
+            (number))
+          (mult_operator)
+          (number)))))
+  (let_binding
+    (value_name)
+    (expression
+      (infix_expression
+        (number)
+        (add_operator)
+        (infix_expression
+          (infix_expression
+            (number)
+            (mult_operator)
+            (number))
+          (mult_operator)
+          (number))))))
+
+================================================================================
+Bool operations
+================================================================================
+
+let x = true;
+let y = !true;
+let z = x && y || false;
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (let_binding
+    (value_name)
+    (expression
+      (boolean)))
+  (let_binding
+    (value_name)
+    (expression
+      (prefix_expression
+        (prefix_operator)
+        (boolean))))
+  (let_binding
+    (value_name)
+    (expression
+      (infix_expression
+        (infix_expression
+          (value_path
+            (value_name))
+          (and_operator)
+          (value_path
+            (value_name)))
+        (or_operator)
+        (boolean)))))

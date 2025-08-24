@@ -1,0 +1,47 @@
+{
+  "name": "tree-sitter-reason",
+  "version": "1.0.0",
+  "description": "Tree-sitter reason grammar",
+  "main": "index.js",
+  "types": "bindings/node",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip"
+  },
+  "author": "teej_dv",
+  "license": "ISC",
+  "tree-sitter": [
+    {
+      "scope": "source.reason",
+      "file-types": [
+        "reason"
+      ]
+    }
+  ],
+  "dependencies": {
+    "node-gyp-build": "^4.8.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "prebuildify": "^6.0.0"
+  },
+  "prettier": {
+    "trailingComma": "all"
+  },
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
+  ]
+}
