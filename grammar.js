@@ -28,7 +28,10 @@ const PREC = {
 module.exports = grammar(require("./embedded/ocaml"), {
   name: "reason",
 
-  conflicts: ($) => [[$._value_name, $._jsx_identifier]],
+  conflicts: ($) => [
+    [$._value_name, $._jsx_identifier],
+    [$.function_type, $.tuple_type, $.constructed_type, $.hash_type]
+  ],
 
   externals: ($) => [
     // Ocaml specific
@@ -71,6 +74,8 @@ module.exports = grammar(require("./embedded/ocaml"), {
         $._semicolon,
       ),
 
+    unit: ($) => seq("(", ")"),
+
     module_binding: ($) =>
       seq(
         field("name", choice($._module_name, alias("_", $.module_name))),
@@ -100,6 +105,7 @@ module.exports = grammar(require("./embedded/ocaml"), {
         optional("rec"),
         field("pattern", choice($._value_name, $.record_destructure)),
         optional(seq(":", $._type)),
+        optional(choice(seq("(", commaSep0($._parameter), ")"), $._parameter)),
         "=",
         $.expression,
         $._semicolon,
@@ -165,13 +171,19 @@ module.exports = grammar(require("./embedded/ocaml"), {
         // $.object_copy_expression,
         // $.method_invocation,
         // $.object_expression,
-        // $.parenthesized_expression,
+        $.parenthesized_expression,
+        $.json,
         // $.ocamlyacc_value,
         // $._extension
       ),
 
+    parenthesized_expression: ($) =>
+      parenthesize($._expression),
+
     grouped_expression: ($) => seq("(", $.expression, ")"),
     unpack: ($) => prec.left(PREC.prefix, seq("...", $._simple_expression)),
+    json: ($) => seq("{", commaSep1($._jsonkv), "}"),
+    _jsonkv: ($) => seq($.string, ":", $._expression),
 
     switch_expression: ($) =>
       seq("switch", "(", $.expression, ")", "{", repeat($._switch_case), "}"),
@@ -375,6 +387,7 @@ module.exports = grammar(require("./embedded/ocaml"), {
         seq("~", $._label_name, $._typed, "=", choice($.expression, "?")),
       ),
 
+    _argument: ($) => choice($._expression, $.labeled_argument),
     variant_expression: ($) =>
       prec.right(
         choice(
@@ -486,13 +499,13 @@ module.exports = grammar(require("./embedded/ocaml"), {
       ),
 
     function_type: ($) =>
-      prec.right(PREC.match, seq("(", commaSep1($._type), ")", "=>", $._type)),
+      prec.right(PREC.match, seq("(", commaSep1(choice($.typed_label, $._type)), ")", "=>", $._type)),
 
     record_declaration: ($) =>
       seq("{", sep1(",", $.field_declaration), optional(","), "}"),
 
-    // typed_label: ($) =>
-    //   prec.left(PREC.seq, seq("~", $._label_name, ":", $._type)),
+    typed_label: ($) =>
+      prec.left(PREC.seq, seq("~", $._label_name, ":", $._type)),
 
     _extensible_type_binding: ($) =>
       seq(

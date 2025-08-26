@@ -278,3 +278,69 @@ let _ = <MyComponent isLoading text onClick />;
         (jsx_attribute
           (property_identifier
             (identifier)))))))
+
+================================================================================
+hooks
+================================================================================
+
+module Repro = {
+  let f = (_x, _y) => ();
+
+  let make = (~onSubmit: t) => {
+    let _ = React.useReducer(((_, xy) => xy), "");
+
+    <form
+      className="test"
+    />;
+  };
+};
+
+--------------------------------------------------------------------------------
+
+    (compilation_unit
+      (module_definition
+        (module_binding
+          (module_name)
+          (block
+            (let_binding
+              (value_name)
+              (expression
+                (function_expression
+                  (parameter)
+                  (parameter)
+                  (expression
+                    (unit)))))
+            (let_binding
+              (value_name)
+              (expression
+                (function_expression
+                  (parameter
+                    (type_constructor_path
+                      (type_constructor)))
+                  (block
+                    (let_binding
+                      (value_name)
+                      (expression
+                        (application_expression
+                          (expression
+                            (value_path
+                              (module_path
+                                (module_name))
+                              (value_name)))
+                          (parenthesized_expression
+                            (function_expression
+                              (parameter)
+                              (parameter)
+                              (expression
+                                (value_path
+                                  (value_name)))))
+                          (string))))
+                    (expression_statement
+                      (expression
+                        (jsx_self_closing_element
+                          (identifier)
+                          (jsx_attribute
+                            (property_identifier
+                              (identifier))
+                            (string
+                              (string_content))))))))))))))

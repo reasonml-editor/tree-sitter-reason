@@ -780,3 +780,73 @@ let y = `PoLy;
     (value_name)
     (expression
       (tag))))
+
+================================================================================
+function application callbacks
+================================================================================
+
+f(() => ())
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (expression_statement
+    (expression
+      (application_expression
+        (expression
+          (value_path
+            (value_name)))
+        (function_expression
+          (expression
+            (unit)))))))
+
+================================================================================
+function application callbacks aux
+================================================================================
+
+f((_, xy) => xy, "")
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (expression_statement
+    (expression
+      (application_expression
+        (expression
+          (value_path
+            (value_name)))
+        (function_expression
+          (parameter)
+          (parameter)
+          (expression
+            (value_path
+              (value_name))))
+        (string)))))
+
+================================================================================
+JSON
+================================================================================
+
+{"x": "a", "y": 1}
+
+--------------------------------------------------------------------------------
+
+(compilation_unit
+  (expression_statement
+    (expression
+      (json
+        (string
+          (string_content))
+        (string
+          (string_content))
+        (string
+          (string_content))
+        (number)))))
+
+================================================================================
+Functions shorthand
+================================================================================
+
+let f(x) = x
+
+--------------------------------------------------------------------------------
